@@ -1,0 +1,140 @@
+<body>
+
+<p>This package allows to generate files in the Quicken interchange format (QIF), which is a specially formatted text (ASCII) file that lets you to move transactions. Although it is only a tool, this package might help some people to understand the Quicken interchange format.</p>
+
+<p>The transactions can be:</p>
+
+<p>
+  <ul>
+    <li>From one Quicken account register into another Quicken account register, or</li>
+    <li>To/From another application that supports the QIF format.</li>
+  </ul>
+</p>
+
+<p>This package was first written to ease the translation from a custom <a href="http://www.php.net">PHP</a>+<a href="http://www.mysql.com">MySQL</a> application to <a href="http://www.gnucash.org">GnuCash</a>. A small Java program was written, which read the transactions stored in MySQL, and used this package to generate a QIF file and import it into GnuCash.</p>
+
+<b>First example: From an account to an other</b>
+
+<p>In the following example QIF file, two accounts are consecutively defined, using the <a href="doc-files/Sample1.java">Sample1.java</a> program. First, the "First Account" is defined, and a deposit is defined, where the money is taken from "Second Account". Then, the "Second Account" is defined, and a deposit is added to it, taking the money from "First Account":</p>
+
+<p>
+<table border="0"><tr bgcolor="#DDDDFF"><td>
+<pre>
+!Account
+NFirst account
+^
+
+!Type:Bank
+D16/10/2001
+T2.0
+N1
+MMemo1
+PPayee1
+L[Second account]
+^
+
+!Account
+NSecond account
+^
+
+!Type:Bank
+D16/10/2001
+T4.0
+N3
+MMemo2
+PPayee2
+L[First account]
+^
+</pre>
+</td></tr>
+<tr><td><font size="1">Output of Sample1</font></td></tr>
+</table>
+</p>
+
+<p>Importing this file directly into <a href="http://www.gnucash.org">GnuCash</a>, we get (with release 1.4.11):<p>
+
+<p align="center"><img src="doc-files/gnucash-sample1.png"></p>
+
+<p><b>Second example: From a category to an account</b></p>
+
+<p>The second example shows how to use account categories, where $2.00 are transferred from <i>Second Account</i>'s <i>SecondAccountCategory</i> into <i>First Account</i>. The transaction is defined in the <i>First Account</i> as a deposit. The <a href="doc-files/Sample2.java">Sample2.java</a> program illustrates this by generating the following QIF file:</p>
+
+<p>
+<table border="0"><tr bgcolor="#DDDDFF"><td>
+<pre>
+!Account
+NFirst account
+^
+
+!Type:Bank
+D16/10/2001
+T2.0
+N1
+MMemo1
+PPayee1
+LSecond account:SecondAccountCategory
+^
+</pre>
+</td></tr>
+<tr><td><font size="1">Output of Sample2</font></td></tr>
+</table>
+</p>
+
+<p>Using once again the importation tool of GnuCash, we see:</p>
+
+<p align="center"><img src="doc-files/gnucash-sample2-import-accounts.png"></p>
+
+<p align="center"><img src="doc-files/gnucash-sample2-import-categories.png"></p>
+
+<p>The importation then gives us the following:</p>
+
+<p align="center"><img src="doc-files/gnucash-sample2.png"></p>
+
+<p>I just don't know why the second account's category is recognized as an INCOME one...</p>
+
+<p><b>A more concrete example: Expenses and incomes</b></p>
+
+<p>The third example shows how to render two transactions: an income and an expense, both of which applies to a bank account: "My bank account". The <a href="doc-files/Sample3.java">Sample3.java</a> program generates the following:</p>
+
+<p>
+<table border="0"><tr bgcolor="#DDDDFF"><td>
+<pre>
+!Account
+NMy bank account
+^
+
+!Type:Bank
+D16/10/2001
+T100.0
+N1
+PMy first paycheck
+LMy incomes
+^
+
+!Type:Bank
+D16/10/2001
+T-10.0
+N2
+PMy first expense
+LMy expenses
+^
+</pre>
+</td></tr>
+<tr><td><font size="1">Output of Sample3</font></td></tr>
+</table>
+</p>
+
+<p>You can then import this file in GnuCash:</p>
+
+<p align="center"><img src="doc-files/gnucash-sample3-import-accounts.png"></p>
+
+<p align="center"><img src="doc-files/gnucash-sample3-import-categories.png"></p>
+
+<p>The final result is:</p>
+
+<p align="center"><img src="doc-files/gnucash-sample3.png"></p>
+
+<p>This is it. This package allowed me to do what I needed: get my data into GnuCash.
+Feel free to adapt it to your needs or improve it. This is free software, protected by the GPL licence.</p>
+
+</body>
